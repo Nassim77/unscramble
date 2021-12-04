@@ -43,16 +43,13 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.gameViewModel = viewModel
+        binding.maxNoOfWords = MAX_NO_OF_WORDS
+        binding.lifecycleOwner = viewLifecycleOwner
         // Setup a click listener for the Submit and Skip buttons.
         binding.submit.setOnClickListener { onSubmitWord() }
         binding.skip.setOnClickListener { onSkipWord() }
         // Update the UI
-        viewModel.currentWordCount.observe(viewLifecycleOwner,
-            { newWordCount ->
-                binding.wordCount.text =
-                    getString(R.string.word_count, newWordCount, MAX_NO_OF_WORDS)
-            })
     }
 
     /*
@@ -88,11 +85,7 @@ class GameFragment : Fragment() {
     /*
      * Gets a random word for the list of words and shuffles the letters in it.
      */
-    private fun getNextScrambledWord(): String {
-        val tempWord = allWordsList.random().toCharArray()
-        tempWord.shuffle()
-        return String(tempWord)
-    }
+
 
     /*
     * Creates and shows an AlertDialog with the final score.
@@ -128,10 +121,7 @@ class GameFragment : Fragment() {
         activity?.finish()
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        Log.d("GameFragment", "GameFragment destroyed!")
-    }
+
 
     /*
     * Sets and resets the text field error status.
